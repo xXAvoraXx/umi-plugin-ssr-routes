@@ -1,4 +1,3 @@
-export default () => `\
 interface RouteObject {
   children?: Route[];
   element?: React.ReactNode | null;
@@ -11,12 +10,12 @@ interface Route extends RouteObject {
   name?: string;
   icon?: React.ReactNode | string | null;
   access?: string;
-  parentId?: 'ant-design-pro-layout' | string;
+  parentId?: "ant-design-pro-layout" | string;
   locale?: string;
   target?: string;
-  navTheme?: 'dark' | 'light' | 'realDark' | undefined;
-  layout?: 'side' | 'top' | 'mix';
-  headerTheme?: 'dark' | 'light';
+  navTheme?: "dark" | "light" | "realDark" | undefined;
+  layout?: "side" | "top" | "mix";
+  headerTheme?: "dark" | "light";
   flatMenu?: boolean;
   headerRender?: boolean;
   footerRender?: boolean;
@@ -35,13 +34,16 @@ interface Route extends RouteObject {
 // Sunucudan gelen rota verisi RouteRaw[] olarak olur
 interface RouteRaw extends Route {
   key?: string;
-  parentKeys?: 'ant-design-pro-layout' | string[];
+  parentKeys?: "ant-design-pro-layout" | string[];
   routes?: RouteRaw[];
   component?: string;
 }
 
 // Ön tarafta sunucudan gelen verilere dayalı olarak oluşturulan React.lazy gecikmeli yükleme bileşeni veya Outlet (birinci seviye rota)
-type RouteComponent = React.LazyExoticComponent<React.ComponentType<any>> | React.ReactElement | null;
+type RouteComponent =
+  | React.LazyExoticComponent<React.ComponentType<any>>
+  | React.ReactElement
+  | null;
 
 // patchRoutes işlevinin parametresi { routes, routeComponents } şeklinde çözümlenebilir
 // Bu tür, Object.assign(routes, parsedRoutes) işlemi için kullanılır, rota verilerini birleştirir
@@ -66,4 +68,3 @@ interface ComponentRaw {
   fallBack: string;
   children: ComponentRaw[];
 }
-`;

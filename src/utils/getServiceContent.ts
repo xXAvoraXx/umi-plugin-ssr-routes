@@ -1,7 +1,8 @@
-export default (fetchRoutes: () => Promise<any>) => {
+export default (fetchRoutes: () => Promise<RouteRaw[]>) => {
+  const fetchRoutesStr = fetchRoutes.toString();
   return `\
-export async function getRoutersInfo(): Promise<API.RouteRaw[]> {
-  return await fetchRoutes();
+export async function getRoutersInfo(): Promise<RouteRaw[]> {
+  return await ${fetchRoutesStr};
 }
   `;
 };

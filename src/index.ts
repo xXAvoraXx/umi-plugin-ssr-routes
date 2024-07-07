@@ -8,7 +8,7 @@ import getSessionContent from "./utils/getSessionContent";
 import getIconUtilContent from "./utils/getIconUtilContent";
 import { join } from "path";
 
-const DIR_NAME = "plugin-ssr-routes";
+const DIR_NAME = ".";
 
 export default (api: IApi) => {
   const umiTmpDir = api.paths.absTmpPath;
@@ -71,18 +71,18 @@ export default (api: IApi) => {
     });
 
     api.writeTmpFile({
-      path: `${DIR_NAME}/typing.d.ts`,
+      path: `${DIR_NAME}/typing.ts`,
       content: getTypeContent(),
     });
 
     api.writeTmpFile({
-      path: `${DIR_NAME}/runtime.ts`,
+      path: `${DIR_NAME}/runtime.tsx`,
       content: getRuntimeContent(),
     });
   });
 
   api.addRuntimePlugin({
-    fn: () => [join(umiTmpDir!, `${DIR_NAME}/runtime.ts`)],
+    fn: () => [join(umiTmpDir!, `${DIR_NAME}/runtime.tsx`)],
   });
 
   api.addTmpGenerateWatcherPaths(() => [
