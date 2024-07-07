@@ -22,4 +22,4 @@ jobs:
       - name: Publish package
         run: yarn publish --access public --tag ${{ env.VERSION }} --non-interactive
         env:
-          npmAuthToken: ${{ secrets.NPM_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
