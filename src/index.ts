@@ -12,6 +12,9 @@ const DIR_NAME = ".";
 
 export default (api: IApi) => {
   const umiTmpDir = api.paths.absTmpPath;
+
+  api.addRuntimePluginKey(() => "ssrRoutes");
+
   api.logger.info("Use ssr-routes plugin.");
 
   api.describe({
@@ -19,7 +22,9 @@ export default (api: IApi) => {
     config: {
       schema(joi) {
         return joi.object({
-          fetchRoutes: joi.function().required(),
+          apiPath: joi.string().required(),
+          requestLibPath: joi.string().required(),
+          responseType: joi.string().required(),
         });
       },
       onChange: api.ConfigChangeType.regenerateTmpFiles,
@@ -35,11 +40,12 @@ export default (api: IApi) => {
     return;
   }
 
-  const { fetchRoutes } = api.userConfig?.ssrRoutes || {};
+  const { apiPath, requestLibPath, responseType } =
+    api.userConfig?.ssrRoutes || {};
 
-  if (!fetchRoutes) {
+  if (!apiPath && !requestLibPath && !responseType) {
     api.logger.warn(
-      "Please configure ssrRoutes.fetchRoutes, otherwise plugin-ssr-routes will not work."
+      "Please configure ssrRoutes.apiPath, ssrRoutes.requestLibPath ssrRoutes.responseType, otherwise plugin-ssr-routes will not work."
     );
     return;
   }
@@ -67,7 +73,7 @@ export default (api: IApi) => {
 
     api.writeTmpFile({
       path: `${DIR_NAME}/service.ts`,
-      content: getServiceContent(fetchRoutes),
+      content: getServiceContent(apiPath, requestLibPath, responseType),
     });
 
     api.writeTmpFile({
@@ -79,10 +85,6 @@ export default (api: IApi) => {
       path: `${DIR_NAME}/runtime.tsx`,
       content: getRuntimeContent(),
     });
-  });
-
-  api.addRuntimePlugin({
-    fn: () => [join(umiTmpDir!, `${DIR_NAME}/runtime.tsx`)],
   });
 
   api.addTmpGenerateWatcherPaths(() => [
