@@ -16,6 +16,8 @@ jobs:
           always-auth: true
       - name: Install dependencies
         run: yarn
+      - name: Build Package
+        run: yarn build
       - name: Publish package
         run: yarn publish --access public --non-interactive
         env:
