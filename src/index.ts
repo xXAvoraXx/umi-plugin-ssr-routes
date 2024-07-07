@@ -6,10 +6,12 @@ import getLazyLoadableContent from "./utils/getLazyLoadableContent";
 import getEmptyRouteOutletContent from "./utils/getEmptyRouteOutletContent";
 import getSessionContent from "./utils/getSessionContent";
 import getIconUtilContent from "./utils/getIconUtilContent";
+import { join } from "path";
 
 const DIR_NAME = "plugin-ssr-routes";
 
 export default (api: IApi) => {
+  const umiTmpDir = api.paths.absTmpPath;
   api.logger.info("Use ssr-routes plugin.");
 
   api.describe({
@@ -43,7 +45,6 @@ export default (api: IApi) => {
   }
 
   api.onGenerateFiles(async () => {
-
     api.writeTmpFile({
       path: `${DIR_NAME}/LazyLoadable.tsx`,
       content: getLazyLoadableContent(),
@@ -75,9 +76,16 @@ export default (api: IApi) => {
     });
 
     api.writeTmpFile({
-      path: `${DIR_NAME}/runtime.tsx`,
+      path: `${DIR_NAME}/runtime.ts`,
       content: getRuntimeContent(),
     });
-
   });
+
+  api.addRuntimePlugin({
+    fn: () => [join(umiTmpDir!, `${DIR_NAME}/runtime.ts`)],
+  });
+
+  api.addTmpGenerateWatcherPaths(() => [
+    join(umiTmpDir!, `${DIR_NAME}/service.ts`),
+  ]);
 };

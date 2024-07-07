@@ -1,6 +1,7 @@
 export default () => {
   return `\
-declare namespace API {
+import { ComponentType, LazyExoticComponent } from "react";
+
   interface RouteObject {
     children?: API.Route[];
     element?: React.ReactNode | null;
@@ -58,8 +59,8 @@ declare namespace API {
 
   // parseRoutes işlevinin dönüş değeri
   interface ParseRoutesReturnType {
-    routes: DynamicRoutes.ParsedRoutes;
-    routeComponents: DynamicRoutes.ParsedRouteComponent;
+    routes: ParsedRoutes;
+    routeComponents: ParsedRouteComponent;
   }
 
   interface ComponentRaw {
@@ -68,6 +69,5 @@ declare namespace API {
     fallBack: string;
     children: ComponentRaw[]
   }
-}
   `;
 };

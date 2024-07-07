@@ -16,7 +16,7 @@ export function setRemoteMenu(data: API.RouteRaw[]) {
 
 function generateComponentPath(inputPath: string): string {
     // Başındaki './' kısmını kaldır
-    let newPath = inputPath.replace(/^\.\//, '');
+    let newPath = inputPath.replace(/^\\.\\//, '');
 
     // Slash karakterlerini işle
     const pathSegments = newPath.split('/');
