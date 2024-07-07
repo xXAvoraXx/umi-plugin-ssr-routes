@@ -4,13 +4,13 @@ import LazyLoadable from './LazyLoadable';
 import { createIcon } from './utils';
 import { Navigate } from '@umijs/max';
 import React, { lazy } from 'react';
-let remoteMenu: API.RouteRaw[] = [];
+let remoteMenu: RouteRaw[] = [];
 
 export function getRemoteMenu() {
     return remoteMenu;
 }
 
-export function setRemoteMenu(data: API.RouteRaw[]) {
+export function setRemoteMenu(data: RouteRaw[]) {
     remoteMenu = data;
 }
 
@@ -49,7 +49,7 @@ function generateComponent(component: string | undefined): React.ReactNode | nul
 }
 
 // Sunucudan gelen RouteRaw dizisini Route dizisine dönüştürün
-function convertRoutes(rawRoutes: API.RouteRaw[]): API.Route[] {
+function convertRoutes(rawRoutes: RouteRaw[]): Route[] {
     return rawRoutes.map((rawRoute) => {
         const { component, routes, ...rest } = rawRoute;
 
@@ -70,7 +70,7 @@ function convertRoutes(rawRoutes: API.RouteRaw[]): API.Route[] {
     });
 }
 
-export function parseRoutes(layout: API.RouteRaw, routesRaw: API.RouteRaw[]) {
+export function parseRoutes(layout: RouteRaw, routesRaw: RouteRaw[]) {
     routesRaw.forEach((route) => {
         layout.routes?.push(route);
     });

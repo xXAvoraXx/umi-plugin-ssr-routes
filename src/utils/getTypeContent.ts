@@ -39,31 +39,4 @@ interface RouteRaw extends Route {
   routes?: RouteRaw[];
   component?: string;
 }
-
-// Ön tarafta sunucudan gelen verilere dayalı olarak oluşturulan React.lazy gecikmeli yükleme bileşeni veya Outlet (birinci seviye rota)
-type RouteComponent = React.LazyExoticComponent<React.ComponentType<any>> | React.ReactElement | null;
-
-// patchRoutes işlevinin parametresi { routes, routeComponents } şeklinde çözümlenebilir
-// Bu tür, Object.assign(routes, parsedRoutes) işlemi için kullanılır, rota verilerini birleştirir
-interface ParsedRoutes {
-  [key: number]: Route;
-}
-
-// Bu tür, Object.assign(routeComponents, parsedRoutes) işlemi için kullanılır, rota bileşenlerini birleştirir
-interface ParsedRouteComponent {
-  [key: number]: RouteComponent;
-}
-
-// parseRoutes işlevinin dönüş değeri
-interface ParseRoutesReturnType {
-  routes: ParsedRoutes;
-  routeComponents: ParsedRouteComponent;
-}
-
-interface ComponentRaw {
-  key: string;
-  filePath: string;
-  fallBack: string;
-  children: ComponentRaw[];
-}
 `;
