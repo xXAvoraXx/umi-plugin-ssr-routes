@@ -15,40 +15,40 @@ export function setRemoteMenu(data: RouteRaw[]) {
 }
 
 function generateComponentPath(inputPath: string): string {
-    // Başındaki './' kısmını kaldır
+    // Remove the './' at the beginning
     let newPath = inputPath.replace(/^\\.\\//, '');
 
-    // Slash karakterlerini işle
+    // Process slash characters
     const pathSegments = newPath.split('/');
     newPath = pathSegments
         .map((segment, index) => {
-            // İlk segmentin sonuna "pages" ekleme
+            // Add "pages" at the end of the first segment
             if (index === 0) {
                 return segment;
             }
-            // Diğer segmentlerin sonuna "pages" ekle
+            // Add "pages" at the end of other segments
             return 'pages/' + segment;
         })
         .join('/');
 
-    // Sonuna '/index' ekle
+    // Add '/index' at the end
     newPath = newPath + '/index';
 
     return newPath;
 }
 
-// component özelliğini eleman özelliğine çeviren fonksiyon
+// Function to convert component property to element property
 function generateComponent(component: string | undefined): React.ReactNode | null {
-    // component değeri varsa dönüş yapın, yoksa null döndürün
+    // Return if component exists, otherwise return null
     if (component) {
         const componentPath = generateComponentPath(component);
-        // Bileşeni oluştur ve sakla
+        // Create and store the component
         return React.createElement(LazyLoadable(lazy(() => import(\`@/pages/\${componentPath}\`))));
     }
     return React.createElement(EmptyRouteOutlet);
 }
 
-// Sunucudan gelen RouteRaw dizisini Route dizisine dönüştürün
+// Convert RouteRaw array from server to Route array
 function convertRoutes(rawRoutes: RouteRaw[]): Route[] {
     return rawRoutes.map((rawRoute) => {
         const { component, routes, ...rest } = rawRoute;

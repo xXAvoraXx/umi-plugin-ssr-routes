@@ -4,7 +4,7 @@ interface RouteObject {
   element?: React.ReactNode | null;
 }
 
-// Ön tarafta sunucudan gelen verilere dayalı olarak oluşturulan rota verisi
+// Route data generated on the front end based on data from the server.
 interface Route extends RouteObject {
   id: string;
   path: string;
@@ -32,7 +32,7 @@ interface Route extends RouteObject {
   [key: string]: any;
 }
 
-// Sunucudan gelen rota verisi RouteRaw[] olarak olur
+// Route data from the server will be RouteRaw[]
 interface RouteRaw extends Route {
   key?: string;
   parentKeys?: 'ant-design-pro-layout' | string[];
