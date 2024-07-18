@@ -45,8 +45,8 @@ export default (api: IApi) => {
     return;
   }
 
-  //api.addRuntimePluginKey(() => "ssrRoutes");
-  api.addRuntimePluginKey(() => ["getServerSideRoutes"]);
+  api.addRuntimePluginKey(() => "ssrRoutes");
+  //api.addRuntimePluginKey(() => ["getServerSideRoutes"]);
 
   api.addRuntimePlugin(() => {
     return [withTmpPath({ api, path: "runtime.tsx" })];
