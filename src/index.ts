@@ -1,34 +1,29 @@
-import type { IApi } from "umi";
-import getServiceContent from "./utils/getServiceContent";
+import { RUNTIME_TYPE_FILE_NAME, type IApi } from "umi";
 import getTypeContent from "./utils/getTypeContent";
 import getRuntimeContent from "./utils/getRuntimeContent";
 import getLazyLoadableContent from "./utils/getLazyLoadableContent";
 import getEmptyRouteOutletContent from "./utils/getEmptyRouteOutletContent";
 import getSessionContent from "./utils/getSessionContent";
 import getIconUtilContent from "./utils/getIconUtilContent";
-import { join } from "path";
+import { withTmpPath } from "./utils/withTmpPath";
 
 const DIR_NAME = ".";
 
 export default (api: IApi) => {
-  const umiTmpDir = api.paths.absTmpPath;
-
-  api.addRuntimePluginKey(() => "ssrRoutes");
-
   api.logger.info("Use ssr-routes plugin.");
 
   api.describe({
     key: "ssrRoutes",
-    config: {
-      schema(joi) {
-        return joi.object({
-          apiPath: joi.string().required(),
-          requestLibPath: joi.string().required(),
-          responseType: joi.string().required(),
-        });
-      },
-      onChange: api.ConfigChangeType.regenerateTmpFiles,
-    },
+    // config: {
+    //   // schema(joi) {
+    //   //   return joi.object({
+    //   //     apiPath: joi.string().required(),
+    //   //     requestLibPath: joi.string().required(),
+    //   //     responseType: joi.string().required(),
+    //   //   });
+    //   // },
+    //   onChange: api.ConfigChangeType.regenerateTmpFiles,
+    // },
     enableBy: api.EnableBy.config,
   });
 
@@ -50,6 +45,13 @@ export default (api: IApi) => {
     return;
   }
 
+  //api.addRuntimePluginKey(() => "ssrRoutes");
+  api.addRuntimePluginKey(() => ["getServerSideRoutes"]);
+
+  api.addRuntimePlugin(() => {
+    return [withTmpPath({ api, path: "runtime.tsx" })];
+  });
+
   api.onGenerateFiles(async () => {
     api.writeTmpFile({
       path: `${DIR_NAME}/LazyLoadable.tsx`,
@@ -70,12 +72,6 @@ export default (api: IApi) => {
       path: `${DIR_NAME}/util.ts`,
       content: getIconUtilContent(),
     });
-
-    api.writeTmpFile({
-      path: `${DIR_NAME}/service.ts`,
-      content: getServiceContent(apiPath, requestLibPath, responseType),
-    });
-
     api.writeTmpFile({
       path: `${DIR_NAME}/typing.ts`,
       content: getTypeContent(),
@@ -83,11 +79,18 @@ export default (api: IApi) => {
 
     api.writeTmpFile({
       path: `${DIR_NAME}/runtime.tsx`,
-      content: getRuntimeContent(),
+      content: api.appData.appJS?.exports.includes("getServerSideRoutes")
+        ? getRuntimeContent()
+        : "export default () => ({})",
+    });
+
+    api.writeTmpFile({
+      path: RUNTIME_TYPE_FILE_NAME,
+      content: `
+export interface IRuntimeConfig {
+  getServerSideRoutes?: () => Promise<RouteRaw[]>
+}
+      `,
     });
   });
-
-  api.addTmpGenerateWatcherPaths(() => [
-    join(umiTmpDir!, `${DIR_NAME}/service.ts`),
-  ]);
 };
