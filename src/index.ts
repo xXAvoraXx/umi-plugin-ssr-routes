@@ -89,7 +89,7 @@ export default (api: IApi) => {
     api.writeTmpFile({
       path: RUNTIME_TYPE_FILE_NAME,
       content: `
-import { RouteRaw } from './types';
+import { RouteRaw } from './typing';
 export interface IRuntimeConfig {
   getServerSideRoutes?: () => Promise<RouteRaw[]>
 }
