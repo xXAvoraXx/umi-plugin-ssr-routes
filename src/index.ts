@@ -71,7 +71,7 @@ export default (api: IApi) => {
     });
 
     api.writeTmpFile({
-      path: `util.ts`,
+      path: `utils.ts`,
       content: getIconUtilContent(),
     });
     api.writeTmpFile({
