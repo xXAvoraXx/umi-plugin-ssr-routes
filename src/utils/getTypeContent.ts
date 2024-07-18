@@ -5,7 +5,7 @@ interface RouteObject {
 }
 
 // Route data generated on the front end based on data from the server.
-interface Route extends RouteObject {
+export interface Route extends RouteObject {
   id: string;
   path: string;
   name?: string;
@@ -33,7 +33,7 @@ interface Route extends RouteObject {
 }
 
 // Route data from the server will be RouteRaw[]
-interface RouteRaw extends Route {
+export interface RouteRaw extends Route {
   key?: string;
   parentKeys?: 'ant-design-pro-layout' | string[];
   routes?: RouteRaw[];

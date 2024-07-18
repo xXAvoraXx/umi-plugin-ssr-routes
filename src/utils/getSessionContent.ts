@@ -4,6 +4,7 @@ import LazyLoadable from './LazyLoadable';
 import { createIcon } from './utils';
 import { Navigate } from '@umijs/max';
 import React, { lazy } from 'react';
+import { Route, RouteRaw } from './types';
 let remoteMenu: RouteRaw[] = [];
 
 export function getRemoteMenu() {
