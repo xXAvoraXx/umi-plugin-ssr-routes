@@ -11,7 +11,7 @@ export interface Route extends RouteObject {
   name?: string;
   icon?: React.ReactNode | string | null;
   access?: string;
-  parentId?: 'ant-design-pro-layout' | string;
+  parentId?: 'ant-design-pro-layout' | '@@/global-layout' | string;
   locale?: string;
   target?: string;
   navTheme?: 'dark' | 'light' | 'realDark' | undefined;
@@ -35,7 +35,7 @@ export interface Route extends RouteObject {
 // Route data from the server will be RouteRaw[]
 export interface RouteRaw extends Route {
   key?: string;
-  parentKeys?: 'ant-design-pro-layout' | string[];
+  parentKeys?: 'ant-design-pro-layout' | '@@/global-layout' | string[];
   routes?: RouteRaw[];
   component?: string;
 }

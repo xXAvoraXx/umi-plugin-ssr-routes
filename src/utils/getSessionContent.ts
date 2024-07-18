@@ -91,7 +91,7 @@ export function patchRouteWithRemoteMenus(routes: any) {
     }
     let proLayout = null;
     for (const routeItem of routes) {
-        if (routeItem.id === 'ant-design-pro-layout') {
+        if (routeItem.id === 'ant-design-pro-layout' || routeItem.id === '@@/global-layout') {
             proLayout = routeItem;
             break;
         }

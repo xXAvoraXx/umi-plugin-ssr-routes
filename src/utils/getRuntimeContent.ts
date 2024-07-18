@@ -6,7 +6,6 @@ export default () => {
   setRemoteMenu,
 } from './session';
   import { getServerSideRoutes } from '@/app';
-  import { parseRoutes } from './utils';
   import { history } from '@umijs/max';
 
 export async function patchClientRoutes({ routes }) {
