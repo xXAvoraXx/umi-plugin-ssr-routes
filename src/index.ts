@@ -26,7 +26,7 @@ export default (api: IApi) => {
       schema({ zod }) {
         return zod.record(zod.any());
       },
-      //onChange: api.ConfigChangeType.regenerateTmpFiles,
+      onChange: api.ConfigChangeType.regenerateTmpFiles,
     },
     enableBy: api.EnableBy.config,
   });
@@ -49,7 +49,7 @@ export default (api: IApi) => {
     return;
   }
 
-  //api.addRuntimePluginKey(() => "ssrRoutes");
+  api.addRuntimePluginKey(() => "ssrRoutes");
   //api.addRuntimePluginKey(() => ["getServerSideRoutes"]);
 
 
