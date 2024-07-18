@@ -24,6 +24,12 @@ export default (api: IApi) => {
     //   // },
     //   onChange: api.ConfigChangeType.regenerateTmpFiles,
     // },
+    config: {
+      schema(joi) {
+        return joi.object({});
+      },
+      onChange: api.ConfigChangeType.regenerateTmpFiles,
+    },
     enableBy: api.EnableBy.config,
   });
 
