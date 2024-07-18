@@ -39,18 +39,18 @@ export default (api: IApi) => {
     return;
   }
 
-  const { apiPath, requestLibPath, responseType } =
-    api.userConfig?.ssrRoutes || {};
+  // const { apiPath, requestLibPath, responseType } =
+  //   api.userConfig?.ssrRoutes || {};
 
-  if (!apiPath && !requestLibPath && !responseType) {
-    api.logger.warn(
-      "Please configure ssrRoutes.apiPath, ssrRoutes.requestLibPath ssrRoutes.responseType, otherwise plugin-ssr-routes will not work."
-    );
-    return;
-  }
+  // if (!apiPath) {
+  //   api.logger.warn(
+  //     "Please configure ssrRoutes.apiPath, ssrRoutes.requestLibPath ssrRoutes.responseType, otherwise plugin-ssr-routes will not work."
+  //   );
+  //   return;
+  // }
 
-  api.addRuntimePluginKey(() => "ssrRoutes");
-  //api.addRuntimePluginKey(() => ["getServerSideRoutes"]);
+  //api.addRuntimePluginKey(() => "ssrRoutes");
+  api.addRuntimePluginKey(() => ["getServerSideRoutes"]);
 
 
 
