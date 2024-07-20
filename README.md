@@ -27,7 +27,7 @@ Configure in `app.ts\tsx\js`,
 
 
 ```tsx
-export async function getServerSideRoutes(): Promise<RouteRaw[]> {
+export async function getServerSideRoutes(): Promise<ServerRouteResponse[]> {
   return await getUserRoutes().then((res) => {
     if (res.data) {
       return res.data;
@@ -40,7 +40,7 @@ export async function getServerSideRoutes(): Promise<RouteRaw[]> {
 /** GET /api/getUserRoutes */
 export async function getUserRoutes(options?: { [key: string]: any }) {
   return request<{
-    data: RouteRaw[];
+    data: ServerRouteResponse[];
   }>('/api/GetUserRoutes', {
     method: 'GET',
     prefix: undefined,

@@ -8,6 +8,7 @@ export default () => {
   import { getServerSideRoutes } from '@/app';
   import { history } from '@umijs/max';
 
+// https://umijs.org/docs/api/runtime-config#patchroutes
 export async function patchClientRoutes({ routes }) {
   patchRouteWithRemoteMenus(routes);
 }

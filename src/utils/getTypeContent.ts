@@ -1,17 +1,15 @@
 export default () => `\
-interface RouteObject {
-  children?: Route[];
+import { type IRoute } from "umi";
+interface Route extends IRoute {
+  children?: LayoutRoute[];
   element?: React.ReactNode | null;
 }
 
 // Route data generated on the front end based on data from the server.
-export interface Route extends RouteObject {
-  id: string;
-  path: string;
+export interface LayoutRoute extends Route {
   name?: string;
   icon?: React.ReactNode | string | null;
   access?: string;
-  parentId?: 'ant-design-pro-layout' | '@@/global-layout' | string;
   locale?: string;
   target?: string;
   navTheme?: 'dark' | 'light' | 'realDark' | undefined;
@@ -29,14 +27,13 @@ export interface Route extends RouteObject {
   hideInBreadcrumb?: boolean;
   redirect?: string;
   disabled?: boolean;
-  [key: string]: any;
 }
 
-// Route data from the server will be RouteRaw[]
-export interface RouteRaw extends Route {
+// Route data from the server will be ServerRouteResponse[]
+export interface ServerRouteResponse extends LayoutRoute {
   key?: string;
   parentKeys?: 'ant-design-pro-layout' | '@@/global-layout' | string[];
-  routes?: RouteRaw[];
+  routes?: ServerRouteResponse[];
   component?: string;
 }
 `;

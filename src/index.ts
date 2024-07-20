@@ -2,10 +2,10 @@ import { RUNTIME_TYPE_FILE_NAME, type IApi } from "umi";
 import getTypeContent from "./utils/getTypeContent";
 import getRuntimeContent from "./utils/getRuntimeContent";
 import getLazyLoadableContent from "./utils/getLazyLoadableContent";
-import getEmptyRouteOutletContent from "./utils/getEmptyRouteOutletContent";
 import getSessionContent from "./utils/getSessionContent";
 import getIconUtilContent from "./utils/getIconUtilContent";
 import { withTmpPath } from "./utils/withTmpPath";
+import getIndexContent from "./utils/getIndexContent";
 
 export default (api: IApi) => {
   api.logger.info("Use ssr-routes plugin.");
@@ -61,11 +61,6 @@ export default (api: IApi) => {
     });
 
     api.writeTmpFile({
-      path: `EmptyRouteOutlet.tsx`,
-      content: getEmptyRouteOutletContent(),
-    });
-
-    api.writeTmpFile({
       path: `session.ts`,
       content: getSessionContent(),
     });
@@ -87,11 +82,16 @@ export default (api: IApi) => {
     });
 
     api.writeTmpFile({
+      path: `index.ts`,
+      content: getIndexContent(),
+    });
+
+    api.writeTmpFile({
       path: RUNTIME_TYPE_FILE_NAME,
       content: `
-import { RouteRaw } from './typing';
+import { ServerRouteResponse } from './typing';
 export interface IRuntimeConfig {
-  getServerSideRoutes?: () => Promise<RouteRaw[]>
+  getServerSideRoutes?: () => Promise<ServerRouteResponse[]>
 }
       `,
     });

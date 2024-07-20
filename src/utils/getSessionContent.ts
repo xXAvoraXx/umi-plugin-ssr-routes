@@ -1,17 +1,17 @@
 export default () => `\
-import EmptyRouteOutlet from './EmptyRouteOutlet';
+import EmptyRoute from '@@/core/EmptyRoute';
 import LazyLoadable from './LazyLoadable';
 import { createIcon } from './utils';
 import { Navigate } from '@umijs/max';
 import React, { lazy } from 'react';
-import { Route, RouteRaw } from './typing';
-let remoteMenu: RouteRaw[] = [];
+import { Route, ServerRouteResponse } from './typing';
+let remoteMenu: ServerRouteResponse[] = [];
 
 export function getRemoteMenu() {
     return remoteMenu;
 }
 
-export function setRemoteMenu(data: RouteRaw[]) {
+export function setRemoteMenu(data: ServerRouteResponse[]) {
     remoteMenu = data;
 }
 
@@ -46,11 +46,11 @@ function generateComponent(component: string | undefined): React.ReactNode | nul
         // Create and store the component
         return React.createElement(LazyLoadable(lazy(() => import(\`@/pages/\${componentPath}\`))));
     }
-    return React.createElement(EmptyRouteOutlet);
+    return React.createElement(EmptyRoute);
 }
 
-// Convert RouteRaw array from server to Route array
-function convertRoutes(rawRoutes: RouteRaw[]): Route[] {
+// Convert ServerRouteResponse array from server to Route array
+function convertRoutes(rawRoutes: ServerRouteResponse[]): Route[] {
     return rawRoutes.map((rawRoute) => {
         const { component, routes, ...rest } = rawRoute;
 
@@ -71,7 +71,7 @@ function convertRoutes(rawRoutes: RouteRaw[]): Route[] {
     });
 }
 
-export function parseRoutes(layout: RouteRaw, routesRaw: RouteRaw[]) {
+export function parseRoutes(layout: ServerRouteResponse, routesRaw: ServerRouteResponse[]) {
     routesRaw.forEach((route) => {
         layout.routes?.push(route);
     });
