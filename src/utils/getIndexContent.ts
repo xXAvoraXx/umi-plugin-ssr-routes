@@ -1,3 +1,3 @@
 export default () => `\
-export { ServerRouteResponse } from './typing';
+export { type ServerRouteResponse } from './typing';
 `;
