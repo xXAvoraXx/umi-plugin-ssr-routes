@@ -6,7 +6,7 @@ interface Route extends IRoute {
 }
 
 // Route data generated on the front end based on data from the server.
-export interface LayoutRoute extends Route {
+interface LayoutRoute extends Route {
   name?: string;
   icon?: React.ReactNode | string | null;
   access?: string;
@@ -30,10 +30,17 @@ export interface LayoutRoute extends Route {
 }
 
 // Route data from the server will be ServerRouteResponse[]
-export interface ServerRouteResponse extends LayoutRoute {
+interface ServerRouteResponse extends LayoutRoute {
   key?: string;
   parentKeys?: 'ant-design-pro-layout' | '@@/global-layout' | string[];
   routes?: ServerRouteResponse[];
   component?: string;
+}
+
+
+export type {
+  Route,
+  LayoutRoute,
+  ServerRouteResponse,
 }
 `;

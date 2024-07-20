@@ -5,23 +5,11 @@ import getLazyLoadableContent from "./utils/getLazyLoadableContent";
 import getSessionContent from "./utils/getSessionContent";
 import getIconUtilContent from "./utils/getIconUtilContent";
 import { withTmpPath } from "./utils/withTmpPath";
-import getIndexContent from "./utils/getIndexContent";
 
 export default (api: IApi) => {
   api.logger.info("Use ssr-routes plugin.");
 
   api.describe({
-    key: "ssrRoutes",
-    // config: {
-    //   // schema(joi) {
-    //   //   return joi.object({
-    //   //     apiPath: joi.string().required(),
-    //   //     requestLibPath: joi.string().required(),
-    //   //     responseType: joi.string().required(),
-    //   //   });
-    //   // },
-    //   onChange: api.ConfigChangeType.regenerateTmpFiles,
-    // },
     config: {
       schema({ zod }) {
         return zod.record(zod.any());
@@ -52,8 +40,6 @@ export default (api: IApi) => {
   //api.addRuntimePluginKey(() => "ssrRoutes");
   api.addRuntimePluginKey(() => ["getServerSideRoutes"]);
 
-
-
   api.onGenerateFiles(async () => {
     api.writeTmpFile({
       path: `LazyLoadable.tsx`,
@@ -69,6 +55,7 @@ export default (api: IApi) => {
       path: `utils.ts`,
       content: getIconUtilContent(),
     });
+
     api.writeTmpFile({
       path: `typing.ts`,
       content: getTypeContent(),
@@ -79,11 +66,6 @@ export default (api: IApi) => {
       content: api.appData.appJS?.exports.includes("getServerSideRoutes")
         ? getRuntimeContent()
         : "export default () => ({})",
-    });
-
-    api.writeTmpFile({
-      path: `index.ts`,
-      content: getIndexContent(),
     });
 
     api.writeTmpFile({
