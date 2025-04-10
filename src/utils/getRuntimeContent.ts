@@ -16,8 +16,8 @@ export async function patchClientRoutes({ routes }) {
 export function render(oldRender: () => void) {
   getServerSideRoutes().then((res) => {
     setRemoteMenu(res);
+    oldRender();
   });
-  oldRender();
 }
   `;
 };
