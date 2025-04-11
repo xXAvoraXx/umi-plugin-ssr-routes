@@ -14,8 +14,9 @@ export function getRemoteMenu() {
 export function setRemoteMenu(data: ServerRouteResponse[]) {
     remoteMenu = data;
 }
-// Common function to generate paths for components or wrappers
-function generatePath(inputPath: string, baseDir: string): string {
+    
+
+function generateComponentPath(inputPath: string): string {
     // Remove the './' at the beginning
     let newPath = inputPath.replace(/^\\.\\//, '');
 
@@ -23,12 +24,12 @@ function generatePath(inputPath: string, baseDir: string): string {
     const pathSegments = newPath.split('/');
     newPath = pathSegments
         .map((segment, index) => {
-            // Add baseDir at the end of the first segment
+            // Add "pages" at the end of the first segment
             if (index === 0) {
                 return segment;
             }
-            // Add baseDir at the end of other segments
-            return \`\${baseDir}/\${segment}\`;
+            // Add "pages" at the end of other segments
+            return 'pages/' + segment;
         })
         .join('/');
 
@@ -36,16 +37,6 @@ function generatePath(inputPath: string, baseDir: string): string {
     newPath = newPath + '/index';
 
     return newPath;
-}    
-
-// Function to generate component path
-function generateComponentPath(inputPath: string): string {
-    return generatePath(inputPath, 'pages');
-}
-
-// Function to generate wrapper path
-function generateWrapperPath(inputPath: string): string {
-    return generatePath(inputPath, 'wrappers');
 }
 
 // Function to wrap a component with wrappers
@@ -58,7 +49,7 @@ function wrapWithWrappers(
     }
 
     return wrappers.reduceRight((wrappedComponent, wrapperPath) => {
-        const Wrapper = lazy(() => import(\`@/\${generateWrapperPath(wrapperPath)}\`));
+        const Wrapper = lazy(() => import(wrapperPath));
         return React.createElement(LazyLoadable(Wrapper), {}, wrappedComponent);
     }, component);
 }
@@ -69,7 +60,7 @@ function generateComponent(component: string | undefined, wrappers?: Array<strin
     if (component) {
         const componentPath = generateComponentPath(component);
         // Create and store the component
-        const baseComponent = React.createElement(LazyLoadable(lazy(() => import(\`@/\${componentPath}\`))));
+        const baseComponent = React.createElement(LazyLoadable(lazy(() => import(\`@/pages/\${componentPath}\`))));
         return wrapWithWrappers(baseComponent, wrappers);
     }
     return React.createElement(EmptyRoute);
