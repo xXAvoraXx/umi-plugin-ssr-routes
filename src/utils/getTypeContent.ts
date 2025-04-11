@@ -35,6 +35,7 @@ interface ServerRouteResponse extends LayoutRoute {
   parentKeys?: 'ant-design-pro-layout' | '@@/global-layout' | string[];
   routes?: ServerRouteResponse[];
   component?: string;
+  wrappers?: (Array<string> | undefined);
 }
 
 

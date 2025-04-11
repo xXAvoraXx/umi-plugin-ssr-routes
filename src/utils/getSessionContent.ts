@@ -38,13 +38,29 @@ function generateComponentPath(inputPath: string): string {
     return newPath;
 }
 
+// Function to wrap a component with wrappers
+function wrapWithWrappers(
+    component: React.ReactNode,
+    wrappers: Array<string> | undefined
+): React.ReactNode {
+    if (!wrappers || wrappers.length === 0) {
+        return component;
+    }
+
+    return wrappers.reduceRight((wrappedComponent, wrapperPath) => {
+        const Wrapper = lazy(() => import(\`@/wrappers/\${wrapperPath}\`));
+        return React.createElement(LazyLoadable(Wrapper), {}, wrappedComponent);
+    }, component);
+}
+
 // Function to convert component property to element property
-function generateComponent(component: string | undefined): React.ReactNode | null {
+function generateComponent(component: string | undefined, wrappers?: Array<string>): React.ReactNode | null {
     // Return if component exists, otherwise return null
     if (component) {
         const componentPath = generateComponentPath(component);
         // Create and store the component
-        return React.createElement(LazyLoadable(lazy(() => import(\`@/pages/\${componentPath}\`))));
+        const baseComponent = React.createElement(LazyLoadable(lazy(() => import(\`@/pages/\${componentPath}\`))));
+        return wrapWithWrappers(baseComponent, wrappers);
     }
     return React.createElement(EmptyRoute);
 }
@@ -52,7 +68,7 @@ function generateComponent(component: string | undefined): React.ReactNode | nul
 // Convert ServerRouteResponse array from server to Route array
 function convertRoutes(rawRoutes: ServerRouteResponse[]): Route[] {
     return rawRoutes.map((rawRoute) => {
-        const { component, routes, ...rest } = rawRoute;
+        const { component, routes, wrappers, ...rest } = rawRoute;
 
         for (const key in rest) {
             if (rest[key] === null) {
@@ -64,7 +80,7 @@ function convertRoutes(rawRoutes: ServerRouteResponse[]): Route[] {
             ...rest,
             element: rest.redirect
                 ? React.createElement(Navigate, { to: rest.redirect, replace: true })
-                : generateComponent(component),
+                : generateComponent(component, wrappers),
             children: routes ? convertRoutes(routes) : undefined,
             icon: createIcon(rest.icon),
         };
