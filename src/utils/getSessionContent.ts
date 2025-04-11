@@ -49,7 +49,8 @@ function wrapWithWrappers(
     }
 
     return wrappers.reduceRight((wrappedComponent, wrapperPath) => {
-        return React.createElement(LazyLoadable(lazy(() => import(\`\${wrapperPath}\`))), {}, wrappedComponent);
+        const Wrapper = lazy(() => import(\`@/\${wrapperPath}\`));
+        return React.createElement(LazyLoadable(Wrapper), {}, wrappedComponent);
     }, component);
 }
 
