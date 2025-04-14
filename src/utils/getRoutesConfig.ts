@@ -54,7 +54,7 @@ function transformRoute(opts: {
   let absPath = opts.route.path;
   if (absPath?.charAt(0) !== '/') {
     const parentAbsPath = opts.parentId
-      ? opts.memo.ret.find((r) => r.id === opts.parentId)?.absPath.replace(/\/+$/, '/') // to remove '/'s on the tail
+      ? opts.memo.ret.find((r) => r.id === opts.parentId)?.absPath.replace(/\\/+$/, '/') // to remove '/'s on the tail
       : '/';
     absPath = endsWithStar(parentAbsPath)
       ? parentAbsPath
@@ -112,11 +112,11 @@ function transformRoute(opts: {
 function endsWithStar(str: string) {
   return str.endsWith('*');
 }
-  
+
 function ensureWithSlash(left: string, right: string) {
   if (!right?.length || right === '/') {
     return left;
   }
-  return \`\${left.replace(/\\/+\$/, '')}/\${right.replace(/^\\/+/, '')}\`;
+  return \`\${left.replace(/\\/+$/, '')}/\${right.replace(/^\\/+/, '')}\`;
 }
 `;
