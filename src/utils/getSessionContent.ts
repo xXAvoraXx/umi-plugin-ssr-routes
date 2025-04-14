@@ -25,7 +25,7 @@ function generateComponentPath(inputPath: string): string {
 
     if (inputPath.startsWith('./')) {
         // Remove the './' prefix
-        newPath = inputPath.replace(/^\.\/+/, '');
+        newPath = inputPath.replace(/^\.\\/+/, '');
         // Process path segments and add "pages/" prefix
         const pathSegments = newPath.split('/');
         newPath = pathSegments
