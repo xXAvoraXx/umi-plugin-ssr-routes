@@ -5,6 +5,7 @@ import { createIcon } from './utils';
 import { Navigate } from '@umijs/max';
 import React, { lazy } from 'react';
 import { Route, ServerRouteResponse } from './typing';
+import { getConfigRoutes } from './routesConfig';
 let remoteMenu: ServerRouteResponse[] = [];
 
 export function getRemoteMenu() {
@@ -12,7 +13,7 @@ export function getRemoteMenu() {
 }
 
 export function setRemoteMenu(data: ServerRouteResponse[]) {
-    remoteMenu = data;
+    remoteMenu = getConfigRoutes({ routes: data });
 }
     
 
