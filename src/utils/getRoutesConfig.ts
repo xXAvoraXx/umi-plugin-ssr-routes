@@ -98,6 +98,6 @@ function ensureWithSlash(left: string, right: string) {
   if (!right?.length || right === '/') {
     return left;
   }
-  return \`\${left.replace(/\/+$/, '')}/\${right.replace(/^\/+/, '')}\`;
+  return \`\${left.replace(/\/+$/, '')}/\${right.replace(/^\/+/, '')}\`\;
 }
 `;
