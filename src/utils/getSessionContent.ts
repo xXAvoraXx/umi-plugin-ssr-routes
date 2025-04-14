@@ -17,30 +17,24 @@ export function setRemoteMenu(data: ServerRouteResponse[]) {
     
 
 function generateComponentPath(inputPath: string): string {
-    let newPath: string;
+    // Remove the './' at the beginning
+    let newPath = inputPath.replace(/^\\.\\//, '');
 
-    if (inputPath.startsWith('./')) {
-        // Remove the './' prefix
-        newPath = inputPath.replace(/^\\.\\/+/, '');
-        // Process path segments
-        const pathSegments = newPath.split('/');
-        newPath = pathSegments
-            .map((segment, index) => {
-                // Add "pages/" prefix to all segments except the last one
-                if (index < pathSegments.length - 1) {
-                    return \`pages/\${segment}\`;
-                }
-                return segment; // Keep the last segment as is
-            })
-            .join('/');
-        // Add "/index" suffix to the last segment
-        newPath = \`\${newPath}/index\`;
-    } else if (inputPath.startsWith('@/')) {
-        // Remove the '@/' prefix
-        newPath = inputPath.replace(/^@\\/+/, '');
-    } else {
-        throw new Error('Unsupported input path format');
-    }
+    // Process slash characters
+    const pathSegments = newPath.split('/');
+    newPath = pathSegments
+        .map((segment, index) => {
+            // Add "pages" at the end of the first segment
+            if (index === 0) {
+                return segment;
+            }
+            // Add "pages" at the end of other segments
+            return 'pages/' + segment;
+        })
+        .join('/');
+
+    // Add '/index' at the end
+    newPath = newPath + '/index';
 
     return newPath;
 }
