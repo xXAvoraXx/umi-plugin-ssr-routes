@@ -45,7 +45,7 @@ function generateComponent(component: string | undefined): React.ReactNode | nul
     if (component) {
         const componentPath = generateComponentPath(component);
         // Create and store the component
-        const baseComponent = React.createElement(LazyLoadable(lazy(() => import(\`@/\${componentPath}\`))));
+        const baseComponent = React.createElement(LazyLoadable(lazy(() => import(\`@/pages/\${componentPath}\`))));
         return baseComponent;
     }
     return React.createElement(EmptyRoute);
