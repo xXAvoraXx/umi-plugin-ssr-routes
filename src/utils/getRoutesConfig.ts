@@ -1,6 +1,6 @@
 export default () => `
 import assert from 'assert';
-import { ServerRouteResponse } from './typing'; // ServerRouteResponse import edildi
+import { ServerRouteResponse } from './typing';
 
 interface IOpts {
   routes: any[];
@@ -9,11 +9,11 @@ interface IOpts {
 
 interface IMemo {
   id: number;
-  ret: ServerRouteResponse[]; // Dönüş tipi ServerRouteResponse[]
+  ret: ServerRouteResponse[];
 }
 
 export function getConfigRoutes(opts: IOpts): ServerRouteResponse[] {
-  const memo: IMemo = { ret: [], id: 1 }; // ret bir array olarak başlatıldı
+  const memo: IMemo = { ret: [], id: 1 };
   transformRoutes({
     routes: opts.routes,
     parentId: undefined,
@@ -54,13 +54,13 @@ function transformRoute(opts: {
   let absPath = opts.route.path;
   if (absPath?.charAt(0) !== '/') {
     const parentAbsPath = opts.parentId
-      ? opts.memo.ret.find((r) => r.id === opts.parentId)?.path || '/'
+      ? opts.memo.ret.find((r) => r.id === opts.parentId)?.absPath.replace(/\/+$/, '/') // to remove '/'s on the tail
       : '/';
     absPath = endsWithStar(parentAbsPath)
       ? parentAbsPath
       : ensureWithSlash(parentAbsPath, absPath);
   }
-  const transformedRoute: ServerRouteResponse = {
+  const routeData: ServerRouteResponse = {
     ...routeProps,
     path: opts.route.path,
     ...(component
@@ -72,14 +72,32 @@ function transformRoute(opts: {
       : {}),
     parentId: opts.parentId,
     id,
+    absPath,
   };
-  if (absPath) {
-    transformedRoute.path = absPath;
-  }
   if (wrappers?.length) {
-    transformedRoute.wrappers = wrappers;
+    let parentId = opts.parentId;
+    let path = opts.route.path;
+    let layout = opts.route.layout;
+    wrappers.forEach((wrapper: any) => {
+      const { id } = transformRoute({
+        route: {
+          path,
+          component: wrapper,
+          isWrapper: true,
+          ...(layout === false ? { layout: false } : {}),
+        },
+        parentId,
+        memo: opts.memo,
+        onResolveComponent: opts.onResolveComponent,
+      });
+      parentId = id;
+      path = endsWithStar(path) ? '*' : '';
+    });
+    routeData.parentId = parentId;
+    routeData.path = path;
+    routeData.originPath = opts.route.path; // Store original path for layout rendering
   }
-  opts.memo.ret.push(transformedRoute);
+  opts.memo.ret.push(routeData);
   if (opts.route.routes) {
     transformRoutes({
       routes: opts.route.routes,
@@ -88,12 +106,13 @@ function transformRoute(opts: {
       onResolveComponent: opts.onResolveComponent,
     });
   }
+  return { id };
 }
 
 function endsWithStar(str: string) {
   return str.endsWith('*');
 }
-
+  
 function ensureWithSlash(left: string, right: string) {
   if (!right?.length || right === '/') {
     return left;
