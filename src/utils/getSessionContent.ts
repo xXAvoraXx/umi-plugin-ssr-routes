@@ -25,13 +25,19 @@ function generateComponentPath(inputPath: string): string {
 
     if (inputPath.startsWith('./')) {
         // Remove the './' prefix
-        newPath = inputPath.replace(/^\.\\/+/, '');
-        // Process path segments and add "pages/" prefix
+        newPath = inputPath.replace(/^\\.\\/+/, '');
+        // Process path segments
         const pathSegments = newPath.split('/');
         newPath = pathSegments
-            .map((segment, index) => (index === pathSegments.length - 1 ? segment : \`pages/\${segment}\`))
+            .map((segment, index) => {
+                // Add "pages/" prefix to all segments except the last one
+                if (index < pathSegments.length - 1) {
+                    return \`pages/\${segment}\`;
+                }
+                return segment; // Keep the last segment as is
+            })
             .join('/');
-        // Add "/index" suffix
+        // Add "/index" suffix to the last segment
         newPath = \`\${newPath}/index\`;
     } else if (inputPath.startsWith('@/')) {
         // Remove the '@/' prefix
