@@ -13,29 +13,32 @@ export function getRemoteMenu() {
 }
 
 export function setRemoteMenu(data: ServerRouteResponse[]) {
-    remoteMenu = getConfigRoutes({ routes: data });
+
+    var configRoutes = getConfigRoutes({ routes: data });
+
+    remoteMenu = data;
 }
     
 
 function generateComponentPath(inputPath: string): string {
-    // Remove the './' at the beginning
-    let newPath = inputPath.replace(/^\\.\\//, '');
+    let newPath: string;
 
-    // Process slash characters
-    const pathSegments = newPath.split('/');
-    newPath = pathSegments
-        .map((segment, index) => {
-            // Add "pages" at the end of the first segment
-            if (index === 0) {
-                return segment;
-            }
-            // Add "pages" at the end of other segments
-            return 'pages/' + segment;
-        })
-        .join('/');
-
-    // Add '/index' at the end
-    newPath = newPath + '/index';
+    if (inputPath.startsWith('./')) {
+        // Remove the './' prefix
+        newPath = inputPath.replace(/^\.\/+/, '');
+        // Process path segments and add "pages/" prefix
+        const pathSegments = newPath.split('/');
+        newPath = pathSegments
+            .map((segment, index) => (index === pathSegments.length - 1 ? segment : \`pages/\${segment}\`))
+            .join('/');
+        // Add "/index" suffix
+        newPath = \`\${newPath}/index\`;
+    } else if (inputPath.startsWith('@/')) {
+        // Remove the '@/' prefix
+        newPath = inputPath.replace(/^@\\/+/, '');
+    } else {
+        throw new Error('Unsupported input path format');
+    }
 
     return newPath;
 }
@@ -61,7 +64,7 @@ function generateComponent(component: string | undefined, wrappers?: Array<strin
     if (component) {
         const componentPath = generateComponentPath(component);
         // Create and store the component
-        const baseComponent = React.createElement(LazyLoadable(lazy(() => import(\`@/pages/\${componentPath}\`))));
+        const baseComponent = React.createElement(LazyLoadable(lazy(() => import(\`@/\${componentPath}\`))));
         //return wrapWithWrappers(baseComponent, wrappers);
         return baseComponent;
     }

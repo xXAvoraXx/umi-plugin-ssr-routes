@@ -1,7 +1,7 @@
 {
   "name": "umi-plugin-ssr-routes",
   "author": "xXAvoraXx",
-  "version": "1.0.35",
+  "version": "1.0.36",
   "main": "dist/cjs/index.js",
   "types": "dist/cjs/index.d.ts",
   "scripts": {
