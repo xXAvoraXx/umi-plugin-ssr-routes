@@ -5,7 +5,6 @@ import { createIcon } from './utils';
 import { Navigate } from '@umijs/max';
 import React, { lazy } from 'react';
 import { Route, ServerRouteResponse } from './typing';
-import { getConfigRoutes } from './routesConfig';
 let remoteMenu: ServerRouteResponse[] = [];
 
 export function getRemoteMenu() {
@@ -13,9 +12,6 @@ export function getRemoteMenu() {
 }
 
 export function setRemoteMenu(data: ServerRouteResponse[]) {
-
-    var configRoutes = getConfigRoutes({ routes: data });
-
     remoteMenu = data;
 }
     
@@ -49,29 +45,13 @@ function generateComponentPath(inputPath: string): string {
     return newPath;
 }
 
-// Function to wrap a component with wrappers
-function wrapWithWrappers(
-    component: React.ReactNode,
-    wrappers: Array<string> | undefined
-): React.ReactNode {
-    if (!wrappers || wrappers.length === 0) {
-        return component;
-    }
-
-    return wrappers.reduceRight((wrappedComponent, wrapperPath) => {
-        const Wrapper = lazy(() => import(\`@/\${wrapperPath}\`));
-        return React.createElement(LazyLoadable(Wrapper), {}, wrappedComponent);
-    }, component);
-}
-
 // Function to convert component property to element property
-function generateComponent(component: string | undefined, wrappers?: Array<string>): React.ReactNode | null {
+function generateComponent(component: string | undefined): React.ReactNode | null {
     // Return if component exists, otherwise return null
     if (component) {
         const componentPath = generateComponentPath(component);
         // Create and store the component
         const baseComponent = React.createElement(LazyLoadable(lazy(() => import(\`@/\${componentPath}\`))));
-        //return wrapWithWrappers(baseComponent, wrappers);
         return baseComponent;
     }
     return React.createElement(EmptyRoute);
@@ -80,7 +60,7 @@ function generateComponent(component: string | undefined, wrappers?: Array<strin
 // Convert ServerRouteResponse array from server to Route array
 function convertRoutes(rawRoutes: ServerRouteResponse[]): Route[] {
     return rawRoutes.map((rawRoute) => {
-        const { component, routes, wrappers, ...rest } = rawRoute;
+        const { component, routes, ...rest } = rawRoute;
 
         for (const key in rest) {
             if (rest[key] === null) {
@@ -92,7 +72,7 @@ function convertRoutes(rawRoutes: ServerRouteResponse[]): Route[] {
             ...rest,
             element: rest.redirect
                 ? React.createElement(Navigate, { to: rest.redirect, replace: true })
-                : generateComponent(component, wrappers),
+                : generateComponent(component),
             children: routes ? convertRoutes(routes) : undefined,
             icon: createIcon(rest.icon),
         };

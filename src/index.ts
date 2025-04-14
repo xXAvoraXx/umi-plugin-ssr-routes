@@ -5,7 +5,6 @@ import getLazyLoadableContent from "./utils/getLazyLoadableContent";
 import getSessionContent from "./utils/getSessionContent";
 import getIconUtilContent from "./utils/getIconUtilContent";
 import { withTmpPath } from "./utils/withTmpPath";
-import getRoutesConfig from "./utils/getRoutesConfig";
 
 export default (api: IApi) => {
   api.logger.info("Use ssr-routes plugin.");
@@ -60,11 +59,6 @@ export default (api: IApi) => {
     api.writeTmpFile({
       path: `typing.ts`,
       content: getTypeContent(),
-    });
-
-    api.writeTmpFile({
-      path: `routesConfig.ts`,
-      content: getRoutesConfig(),
     });
 
     api.writeTmpFile({
