@@ -62,7 +62,8 @@ function generateComponent(component: string | undefined, wrappers?: Array<strin
         const componentPath = generateComponentPath(component);
         // Create and store the component
         const baseComponent = React.createElement(LazyLoadable(lazy(() => import(\`@/pages/\${componentPath}\`))));
-        return wrapWithWrappers(baseComponent, wrappers);
+        //return wrapWithWrappers(baseComponent, wrappers);
+        return baseComponent;
     }
     return React.createElement(EmptyRoute);
 }

@@ -7714,7 +7714,7 @@ typescript@5.3.3:
   integrity sha512-pXWcraxM0uxAS+tN0AG/BF2TyqmHO014Z070UsJ+pFvYuRSq8KH8DmWpnbXe0pEPDHXZV3FcAbJkijJ5oNEnWw==
 
 "umi-plugin-ssr-routes@file:":
-  version "1.0.32"
+  version "1.0.34"
   resolved "file:"
   dependencies:
     umi-plugin-ssr-routes "file:"
